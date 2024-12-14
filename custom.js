@@ -6,11 +6,11 @@ function getUrlParameter(name) {
     return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
 }
 
-// Get phone number from URL parameter
-const phoneNumber = getUrlParameter('phone');
-
 // Create a function to watch for elements and inject the WhatsApp button
 function watchAndInject() {
+    // Get phone number from URL parameter
+    const phoneNumber = getUrlParameter('phone');
+    
     // Only proceed if phone number is provided
     if (!phoneNumber) return;
 
