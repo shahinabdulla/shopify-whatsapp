@@ -1,5 +1,19 @@
+// Function to get URL parameters
+function getUrlParameter(name) {
+    name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+    const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+    const results = regex.exec(location.search);
+    return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+}
+
+// Get phone number from URL parameter
+const phoneNumber = getUrlParameter('phone');
+
 // Create a function to watch for elements and inject the WhatsApp button
 function watchAndInject() {
+    // Only proceed if phone number is provided
+    if (!phoneNumber) return;
+
     // Create a mutation observer to watch for DOM changes
     const observer = new MutationObserver((mutations, observer) => {
         const paymentContainer = document.querySelector(".product-form__buttons");
@@ -12,7 +26,7 @@ function watchAndInject() {
             const whatsappButton = document.createElement('div');
             whatsappButton.className = 'whatsapp-order-button';
             whatsappButton.innerHTML = `
-                <a href="https://api.whatsapp.com/send?phone=97470574780&text=I'm interested in the product: ${encodeURIComponent(productName)}"
+                <a href="https://api.whatsapp.com/send?phone=${phoneNumber}&text=I'm interested in the product: ${encodeURIComponent(productName)}"
                    target="_blank"
                    style="display: block; text-decoration: none; margin-top: 10px;">
                     <div style="
@@ -35,9 +49,6 @@ function watchAndInject() {
             `;
             
             paymentContainer.appendChild(whatsappButton);
-            
-            // Optional: Stop observing once button is added
-            // observer.disconnect();
         }
     });
 
