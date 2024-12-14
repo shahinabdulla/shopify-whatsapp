@@ -1,15 +1,16 @@
 // Function to get URL parameters
-function getUrlParameter(name) {
-    name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-    const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-    const results = regex.exec(location.search);
-    return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+function getScriptParameter(name) {
+    const scripts = document.getElementsByTagName('script');
+    const currentScript = scripts[scripts.length - 1]; // Gets the last loaded script
+    const scriptUrl = currentScript.src;
+    const urlParams = new URLSearchParams(scriptUrl.split('?')[1]);
+    return urlParams.get(name) || '';
 }
 
 // Create a function to watch for elements and inject the WhatsApp button
 function watchAndInject() {
     // Get phone number from URL parameter
-    const phoneNumber = getUrlParameter('phone');
+    const phoneNumber = getScriptParameter('phone');
     
     // Only proceed if phone number is provided
     if (!phoneNumber) return;
